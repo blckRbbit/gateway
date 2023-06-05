@@ -1,0 +1,54 @@
+server:
+  port: ${PORT}
+spring:
+  config:
+    import:
+      optional:file:.env[.properties]
+    profiles:
+      active: ${PROFILE}
+
+  application:
+    name: xxx-gateway
+  cloud:
+    gateway:
+      globalcors:
+        corsConfigurations:
+          '[/**]':
+            allowedOrigins: "*"
+#            http://localhost:3000
+            allowedMethods:
+              - GET
+              - POST
+              - PATCH
+              - PUT
+              - DELETE
+            allowedHeaders: "*"
+      routes:
+        - id: xxx-core
+          uri: http://localhost:8082/
+          predicates:
+            - Path=/core/**
+          filters:
+            - StripPrefix=1
+            - PrefixPath=/xxx-core
+            - JwtAuthFilter
+        - id: xxx-auth
+          uri: http://localhost:5554/
+          predicates:
+            - Path=/auth/**
+          filters:
+            - StripPrefix=1
+            - PrefixPath=/xxx-auth
+            - JwtAuthFilter
+jwt:
+  secret: ${JWT_SECRET}
+  lifetime: ${JWT_LIFETIME}
+
+#logging:
+#  level:
+#    reactor:
+#      netty: TRACE
+#    org:
+#      springframework:
+#        cloud:
+#          gateway: TRACE

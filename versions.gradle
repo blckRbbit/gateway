@@ -1,0 +1,7 @@
+ext {
+    versions = [
+            'jaxbApi' : '2.4.0-b180830.0359',
+            'jjwt' : '0.9.1',
+            'jakartaXmlBindApi' : '4.0.0'
+    ]
+}
